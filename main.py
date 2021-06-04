@@ -129,7 +129,8 @@ def featureSearchBackward(dataSet, normal):
                 featureToRemove = j
             if accuracy > globalAccuracy:
                 globalAccuracy = accuracy
-        bestFeatures.append((copy.deepcopy(currentSetOfFeatures),currentWorstAccuracy))
+        finish1 = time.perf_counter()
+        bestFeatures.append((copy.deepcopy(currentSetOfFeatures),currentWorstAccuracy,time.perf_counter()))
         if featureToRemove:
             print('On level %d, I removed feature %s to current set with accuracy %%%s' %(i,featureToRemove,currentWorstAccuracy))
             currentSetOfFeatures.remove(featureToRemove)
@@ -137,16 +138,17 @@ def featureSearchBackward(dataSet, normal):
             # print(bestFeatures)
         else:
             print('No feature removed')
-        if(currentWorstAccuracy >= globalAccuracy):
-            bestFeatures.append(currentSetOfFeatures)
-        if(currentWorstAccuracy < globalAccuracy):
-            print('---WARNING, Accuracy has decreased! Continuing search in case of local maxima---')
-            if(timeFlag):
-                finish1 = time.perf_counter()
-                print(f"Time of completion: {finish1-start1:0.4f}s")
-                timeFlag = 0
+        # if(currentWorstAccuracy >= globalAccuracy):
+        #     bestFeatures.append(currentSetOfFeatures)
+        # if(currentWorstAccuracy < globalAccuracy):
+        #     print('---WARNING, Accuracy has decreased! Continuing search in case of local maxima---')
+        #     if(timeFlag):
+        #         finish1 = time.perf_counter()
+        #         print(f"Time of completion: {finish1-start1:0.4f}s")
+        #         timeFlag = 0
     bestFeatures.sort(key=lambda tup: tup[1])
     print('Best Accuracy %%%s using features %s' % (globalAccuracy,bestFeatures[-1][0]))
+    print(f"Time of completion: {bestFeatures[-1][2]-start1:0.4f}s")
     return
 
 def normalizeData(dateSet):
